@@ -50,10 +50,13 @@ const SeedForm: React.FC = () => {
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form data submitted: ", formData);
-    const mnemonic = await decryptNativeWallet(formData.email, formData.password, formData.encryptedWallet)
-    console.log("mnemonic: ", mnemonic)
-    setFormData({ ...formData, mnemonic: mnemonic || "" });
+    try {
+      const mnemonic = await decryptNativeWallet(formData.email, formData.password, formData.encryptedWallet)
+      setFormData({ ...formData, mnemonic: mnemonic || "" });
+    } catch(e) {
+      console.error(e)
+      setFormData({ ...formData, mnemonic: `failed to decrypt: ${e}`});
+    }
   };
 
   return (
